@@ -2,7 +2,7 @@
 """
 Created on Fri Nov 13 14:56:33 2015
 
-@author: amne51ac
+@author: amne51ac, Andrew Hessler
 """
 
 
@@ -18,6 +18,16 @@ class Drones():
         return
 
     def waypoint_handling(self):
+
+        def prepare_waypoint(self):
+            return
+
+        def send_waypoint(self):
+            return
+
+        def street_waypoints(self):
+            return
+
         return
 
     def interface(self):
