@@ -11,14 +11,24 @@ import atexit
 
 
 class Drones():
+    waypoints = None
+    address = None
 
-    def __init__(self):
+    def __init__(self, address='127.0.0.1:14550'):
         # actions to perform on start of program, you know what init does.
+        self.address = address
 
         atexit.register(self.cleanup)
 
     def connect(self):
-        self.vehicle = dronekit.connect('127.0.0.1:14550', wait_ready=True)
+        self.output("Connecting to %s" % self.address)
+        try:
+            self.vehicle = dronekit.connect(self.address, wait_ready=True)
+        except dronekit.lib.APIException:
+            self.output("No connection from drone.")
+            exit
+
+        self.output("Connected to %s" % self.address)
 
     def waypoint_handling(self):
 
@@ -40,10 +50,15 @@ class Drones():
     def mainloop(self):
         return
 
+    def output(self, message):
+        print message
+
     def cleanup(self):
         # actions to take at the end of the program, cleanup if you will lol
+        self.output("Cleaning up...")
         if self.vehicle:
             self.vehicle.close()
+        self.output("Done.")
 
 
 if __name__ == "__main__":
