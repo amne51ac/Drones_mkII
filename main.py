@@ -5,9 +5,56 @@ Created on Fri Nov 13 14:56:33 2015
 @author: amne51ac, andrewhessloch
 """
 
-
 import dronekit
 import atexit
+
+"""
+This is the rewrite of the drones project from the Illinois Instute of
+Technology, led by professor Jeremy Hajek, written by Mark Milhouse and Andrew
+Hessler.  Drone engineering by Nabil Boutaleb, Mark Milhouse, Sean Macintosh,
+Natalia Gruszka, and Mark Latocha.  This code is a private prototype and
+intended for demonstration purposes only, not for distrobution or use with
+live production systems.
+
+Delivery_Drones():
+    # delivery drones is a program for autonomous delivery quadcopter platforms
+    waypoints
+    address
+    cmds
+
+    __init__(self, address='127.0.0.1:14550'):
+        # actions to perform on start of program, you know what init does.
+
+    connect(self):
+        # builds the connection between this machine and the copter itself
+
+    waypoint_handling(self):
+
+        prepare_waypoint(self):
+            # prepare the waypoint object for relaying to the drone
+            # self.vehicle.
+
+        send_waypoint(self):
+            # send the waypoint object to the drone
+
+        street_waypoints(self):
+            # a function for utilizing google maps queries to facilitate drone
+            # navigation
+
+    interface(self):
+        # here we can construct the graphic interface for the users
+
+    mainloop(self):
+        # this loop will help track heartbeat messages and such
+
+    output(self, message):
+        # this allows us to use a standard formatting for messages and
+        # implement logging as well
+
+    cleanup(self):
+        # actions to take at the end of the program, cleanup if you will lol
+
+"""
 
 
 class Delivery_Drones():
