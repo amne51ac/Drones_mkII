@@ -133,7 +133,8 @@ class Delivery_Drones():
         self.output("Taking off...")
 
         while True:
-            self.output("Altitude: " + self.vehicle.location.global_relative_frame.alt)
+            self.output(("Altitude: ",
+                         self.vehicle.location.global_relative_frame.alt))
             if self.vehicle.location.global_relative_frame.alt >= target*0.95:
                 self.output("Reached target altitude")
                 break
@@ -141,6 +142,10 @@ class Delivery_Drones():
 
         self.cmds.next = 0
         self.vehicle.mode = dronekit.VehicleMode("AUTO")
+
+    def begin():
+        #self.vehicle.
+        pass
 
     def interface(self):
         # here we can construct the graphic interface for the users
@@ -175,6 +180,8 @@ class Delivery_Drones():
         self.arm_copter()
         # send the takeoff command
         self.takeoff()
+        # begin mission
+        # self.begin()
 
         self.output("Ready to end.")
         raw_input()
