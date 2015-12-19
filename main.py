@@ -102,9 +102,15 @@ class Delivery_Drones():
         self.cmds.clear()
         self.cmds.upload()
 
-    def prepare_waypoint(self):
+    def prepare_waypoint(self, lat=12, lon=12):
         # prepare the waypoint object for relaying to the drone
-        self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, i.lat, i.lon, 11))
+        self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, lat, lon, 11))
+        # one for destination
+        # one for land
+        # one for release
+        # one for takeoff
+        # undo release
+        # rtl
 
     def send_waypoint(self):
         # send the waypoint object to the drone
