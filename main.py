@@ -87,6 +87,7 @@ class Delivery_Drones():
 
         def prepare_waypoint(self):
             # prepare the waypoint object for relaying to the drone
+            self.waypoints = None
             for i in self.waypoints:
                 self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, i.lat, i.lon, 11))
             return
@@ -107,13 +108,19 @@ class Delivery_Drones():
         # a function for safely arming the vehicle
 
         while not self.vehicle.is_armable:
-            print "waiting for vehicle to be armable"
+            print "Waiting for vehicle to be armable..."
             time.sleep(1)
 
         if self.vehicle.armed:
             self.output("Vehicle already armed")
         else:
             self.vehicle.armed = True
+
+        while not self.vehicle.armed:
+            print "Arming..."
+            time.sleep(1)
+
+        print "!!!Armed!!!"
 
     def interface(self):
         # here we can construct the graphic interface for the users
