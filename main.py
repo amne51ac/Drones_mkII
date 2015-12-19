@@ -72,20 +72,6 @@ class Delivery_Drones():
         self.address = address
         self.connect()
         self.cmds = self.vehicle.commands
-        # clear old waypoints
-        self.clear_waypoint()
-        # take the coordinates
-        self.prepare_waypoint()
-        # write coordinates to the copter
-        self.send_waypoint()
-        # arm the copter
-        self.arm_copter()
-        # send the takeoff command
-        self.takeoff()
-
-        self.output("Ready to end.")
-        raw_input()
-        exit()
 
     def connect(self):
         # builds the connection between this machine and the copter itself
@@ -176,6 +162,23 @@ class Delivery_Drones():
         finally:
             self.output("Done.")
             exit()
+
+    def mainloop(self):
+        # clear old waypoints
+        self.clear_waypoint()
+        # take the coordinates
+        self.prepare_waypoint()
+        # write coordinates to the copter
+        self.send_waypoint()
+        # arm the copter
+        self.arm_copter()
+        # send the takeoff command
+        self.takeoff()
+
+        self.output("Ready to end.")
+        raw_input()
+        exit()
+        
 
 
 if __name__ == "__main__":
