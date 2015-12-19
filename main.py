@@ -143,10 +143,6 @@ class Delivery_Drones():
         self.cmds.next = 0
         self.vehicle.mode = dronekit.VehicleMode("AUTO")
 
-    def begin():
-        #self.vehicle.
-        pass
-
     def interface(self):
         # here we can construct the graphic interface for the users
         return
