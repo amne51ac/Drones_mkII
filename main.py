@@ -67,11 +67,11 @@ class Delivery_Drones():
 
     def __init__(self, address='/dev/cu.usbserial-DN008PBS'):
         # actions to perform on start of program, you know what init does.
+
+        atexit.register(self.cleanup)
         self.address = address
         self.connect()
         self.cmds = self.vehicle.commands
-
-        atexit.register(self.cleanup)
 
     def connect(self):
         # builds the connection between this machine and the copter itself
@@ -80,28 +80,29 @@ class Delivery_Drones():
             self.vehicle = dronekit.connect(self.address, baud=57600)  # , wait_ready=True)
         except dronekit.lib.APIException:
             self.output("No connection from drone.")
-            self.cleanup()
+            exit()
         self.output("Connected to %s" % self.address)
 
-    def waypoint_handling(self):
+    def clear_waypoint(self):
+        self.cmds.clear()
+        self.cmds.upload()
 
-        def prepare_waypoint(self):
-            # prepare the waypoint object for relaying to the drone
-            self.waypoints = None
-            for i in self.waypoints:
-                self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, i.lat, i.lon, 11))
-            return
+    def prepare_waypoint(self):
+        # prepare the waypoint object for relaying to the drone
+        self.waypoints = None
+        for i in self.waypoints:
+            self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, i.lat, i.lon, 11))
+        return
 
-        def send_waypoint(self):
-            # send the waypoint object to the drone
-            self.cmds.upload()
-            return
+    def send_waypoint(self):
+        # send the waypoint object to the drone
+        self.cmds.upload()
+        self.cmds.wait_ready()
+        return
 
-        def street_waypoints(self):
-            # a function for utilizing google maps queries to facilitate drone
-            # navigation
-            return
-
+    def street_waypoints(self):
+        # a function for utilizing google maps queries to facilitate drone
+        # navigation
         return
 
     def arm_copter(self):
@@ -126,11 +127,6 @@ class Delivery_Drones():
         # here we can construct the graphic interface for the users
         return
 
-    def mainloop(self):
-        # this loop will help track heartbeat messages and such
-
-        return
-
     def output(self, message):
         # this allows us to use a standard formatting for messages and
         # implement logging as well
@@ -139,8 +135,11 @@ class Delivery_Drones():
     def cleanup(self):
         # actions to take at the end of the program, cleanup if you will lol
         self.output("Cleaning up...")
+
         try:
             if self.vehicle:
+                if self.vehicle.armed:
+                    self.vehicle.armed = False
                 self.vehicle.close()
         finally:
             self.output("Done.")
