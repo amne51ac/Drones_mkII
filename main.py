@@ -111,9 +111,10 @@ class Delivery_Drones():
     def arm_copter(self, check=True):
         # a function for safely arming the vehicle
 
-        while not self.vehicle.is_armable and check:
-            self.output("Waiting for vehicle to be armable...")
-            time.sleep(1)
+        if check:
+            while not self.vehicle.is_armable:
+                self.output("Waiting for vehicle to be armable...")
+                time.sleep(1)
 
         if self.vehicle.armed:
             self.output("Vehicle already armed")
