@@ -72,12 +72,27 @@ class Delivery_Drones():
         self.address = address
         self.connect()
         self.cmds = self.vehicle.commands
+        # clear old waypoints
+        self.clear_waypoint()
+        # take the coordinates
+        self.prepare_waypoint()
+        # write coordinates to the copter
+        self.send_waypoint()
+        # arm the copter
+        self.arm_copter()
+        # send the takeoff command
+        self.takeoff()
+
+        self.output("Ready to end.")
+        raw_input()
+        exit()
 
     def connect(self):
         # builds the connection between this machine and the copter itself
         self.output("Connecting to %s" % self.address)
         try:
-            self.vehicle = dronekit.connect(self.address, baud=57600)  # , wait_ready=True)
+            self.vehicle = dronekit.connect(self.address, baud=57600,
+                                            wait_ready=True)
         except dronekit.lib.APIException:
             self.output("No connection from drone.")
             exit()
@@ -109,7 +124,7 @@ class Delivery_Drones():
         # a function for safely arming the vehicle
 
         while not self.vehicle.is_armable:
-            print "Waiting for vehicle to be armable..."
+            self.output( "Waiting for vehicle to be armable...")
             time.sleep(1)
 
         if self.vehicle.armed:
@@ -122,6 +137,21 @@ class Delivery_Drones():
             time.sleep(1)
 
         print "!!!Armed!!!"
+
+    def takeoff(self, target=20):
+        self.output("Ready to launch...")
+        self.vehicle.simple_takeoff(target)  # and target altitude
+        self.output("Taking off...")
+
+        while True:
+            self.output( " Altitude: " + self.vehicle.location.global_relative_frame.alt)
+            if self.vehicle.location.global_relative_frame.alt >= target*0.95:
+                print "Reached target altitude"
+                break
+            time.sleep(1)
+
+        self.cmds.next = 0
+        self.vehicle.mode = dronekit.VehicleMode("AUTO")
 
     def interface(self):
         # here we can construct the graphic interface for the users
@@ -151,7 +181,5 @@ if __name__ == "__main__":
     # it is probably being imported as a library, you know...
 
     Drone = Delivery_Drones()
-
-    Drone.mainloop()
 
     print "This is the beginning of the drone adventure!"
