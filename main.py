@@ -104,16 +104,12 @@ class Delivery_Drones():
 
     def prepare_waypoint(self):
         # prepare the waypoint object for relaying to the drone
-        self.waypoints = None
-        for i in self.waypoints:
-            self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, i.lat, i.lon, 11))
-        return
+        self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, i.lat, i.lon, 11))
 
     def send_waypoint(self):
         # send the waypoint object to the drone
         self.cmds.upload()
         self.cmds.wait_ready()
-        return
 
     def street_waypoints(self):
         # a function for utilizing google maps queries to facilitate drone
@@ -124,7 +120,7 @@ class Delivery_Drones():
         # a function for safely arming the vehicle
 
         while not self.vehicle.is_armable:
-            self.output( "Waiting for vehicle to be armable...")
+            self.output("Waiting for vehicle to be armable...")
             time.sleep(1)
 
         if self.vehicle.armed:
@@ -133,10 +129,10 @@ class Delivery_Drones():
             self.vehicle.armed = True
 
         while not self.vehicle.armed:
-            print "Arming..."
+            self.output("Arming...")
             time.sleep(1)
 
-        print "!!!Armed!!!"
+        self.output("!!!Armed!!!")
 
     def takeoff(self, target=20):
         self.output("Ready to launch...")
@@ -144,9 +140,9 @@ class Delivery_Drones():
         self.output("Taking off...")
 
         while True:
-            self.output( " Altitude: " + self.vehicle.location.global_relative_frame.alt)
+            self.output("Altitude: " + self.vehicle.location.global_relative_frame.alt)
             if self.vehicle.location.global_relative_frame.alt >= target*0.95:
-                print "Reached target altitude"
+                self.output("Reached target altitude")
                 break
             time.sleep(1)
 
