@@ -79,7 +79,7 @@ class Delivery_Drones():
         try:
             self.vehicle = dronekit.connect(self.address, baud=57600,
                                             wait_ready=True)
-        except dronekit.lib.APIException:
+        except:  # dronekit.lib.APIException:
             self.output("No connection from drone.")
             exit()
         self.output("Connected to %s" % self.address)
@@ -108,7 +108,7 @@ class Delivery_Drones():
         # navigation
         return
 
-    def arm_copter(self, check=True):
+    def arm_copter(self, check=False):
         # a function for safely arming the vehicle
 
         if check:
