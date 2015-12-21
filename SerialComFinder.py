@@ -5,7 +5,7 @@
 import sys
 import glob
 import serial
-
+import usb
 
 def serial_ports():
     """ Lists serial port names
@@ -16,7 +16,15 @@ def serial_ports():
             A list of the serial ports available on the system
     """
     if sys.platform.startswith('win'):
-        ports = ['COM%s' % (i + 1) for i in range(256)]
+        #ports = ['COM%s' % (i + 1) for i in range(256)]
+        busses = usb.busses()
+      for bus in busses:
+          devices = bus.devices
+          for dev in devices:
+              print "Device:", dev.filename
+              print "  idVendor: %d (0x%04x)" % (dev.idVendor, dev.idVendor)
+              print "  idProduct: %d (0x%04x)" % (dev.idProduct, dev.idProduct)
+
     elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
         # this excludes your current terminal "/dev/tty"
         ports = glob.glob('/dev/tty[A-Za-z]*')
