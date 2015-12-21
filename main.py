@@ -90,13 +90,18 @@ class Delivery_Drones():
 
     def prepare_waypoint(self, lat=12, lon=12):
         # prepare the waypoint object for relaying to the drone
-        self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, lat, lon, 11))
         # one for destination
+        self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, lat, lon, 11))
         # one for land
+        self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_LAND, 0, 0, 0, 0, 0, 0, lat, lon, 11))
         # one for release
+        self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD, 0, 0, 0, 0, 0, 0, lat, lon, 11))
         # one for takeoff
+        self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, lat, lon, 11))
         # undo release
+        self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, lat, lon, 11))
         # rtl
+        self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, lat, lon, 11))
 
     def send_waypoint(self):
         # send the waypoint object to the drone
@@ -190,6 +195,7 @@ class Phone_App():
     def __init__(self):
         atexit.register(self.cleanup)
         return self.lat, self.lon
+        self.cleanup()
         pass
 
     def wait_connection(self):
@@ -206,5 +212,7 @@ if __name__ == "__main__":
     Drone = Delivery_Drones()
 
     lat, lon = Phone_App()
+
+    Drone.mainloop(lat, lon)
 
     print "This is the beginning of the drone adventure!"
