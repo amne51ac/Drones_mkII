@@ -165,11 +165,11 @@ class Delivery_Drones():
             self.output("Done.")
             exit()
 
-    def mainloop(self):
+    def mainloop(self, lat=41.840157, lon=-87.624705):
         # clear old waypoints
         self.clear_waypoint()
         # take the coordinates
-        self.prepare_waypoint()
+        self.prepare_waypoint(lat, lon)
         # write coordinates to the copter
         self.send_waypoint()
         # arm the copter
@@ -182,7 +182,21 @@ class Delivery_Drones():
         self.output("Ready to end.")
         raw_input()
         exit()
-        
+
+
+class Phone_App():
+    lat, lon = 0.0
+
+    def __init__(self):
+        atexit.register(self.cleanup)
+        return self.lat, self.lon
+        pass
+
+    def wait_connection(self):
+        pass
+
+    def cleanup(self):
+        pass
 
 
 if __name__ == "__main__":
@@ -190,5 +204,7 @@ if __name__ == "__main__":
     # it is probably being imported as a library, you know...
 
     Drone = Delivery_Drones()
+
+    lat, lon = Phone_App()
 
     print "This is the beginning of the drone adventure!"
