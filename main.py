@@ -91,10 +91,16 @@ class Delivery_Drones():
     def prepare_waypoint(self, lat=12, lon=12):
         # prepare the waypoint object for relaying to the drone
         self.cmds.add(dronekit.Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, lat, lon, 11))
-        # one for destination
+       #cmd=ommand(target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z)
+        # one for destination:
+        vehicle.mode = VehicleMode("GUIDED") #if necessary, but we are already on Auto, so not necessary.
+        a_location = LocationGlobal(lat, lon, alt)
+vehicle.simple_goto(a_location)
         # one for land
         # one for release
+        wait_ready(*types, **kwargs) # not sure abotu this one, there must be a sub-command to run a command to an external component, the release in our case.
         # one for takeoff
+        simple_takeoff(alt=z)
         # undo release
         # rtl
 
