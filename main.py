@@ -22,43 +22,82 @@ Natalia Gruszka, and Mark Latocha.  This code is a private prototype and
 intended for demonstration purposes only, not for distrobution or use with
 live production systems.
 
-Delivery_Drones():
+
+
+class Delivery_Drones():
     # delivery drones is a program for autonomous delivery quadcopter platforms
-    waypoints
-    address
-    cmds
+    waypoints = A list of waypoints to be processed and sent to the copter
+    address = The COM address of the drone to communicate to
+    cmds = Mavlink commands for communicating
 
-    __init__(self, address='127.0.0.1:14550'):
-        # actions to perform on start of program, you know what init does.
+    def __init__(self, address='/dev/cu.usbserial-DN008PBS'):
+        actions to perform on start of program, you know what init does.
 
-    connect(self):
-        # builds the connection between this machine and the copter itself
 
-    waypoint_handling(self):
+    def serial_ports():
+        Lists serial port names
+        :raises EnvironmentError:
+            On unsupported or unknown platforms
+        :returns:
+            A list of the serial ports available on the system
 
-        prepare_waypoint(self):
-            # prepare the waypoint object for relaying to the drone
-            # self.vehicle.
+    def connect(self):
+        builds the connection between this machine and the copter itself
 
-        send_waypoint(self):
-            # send the waypoint object to the drone
+    def clear_waypoint(self):
+        self.cmds.clear()
+        self.cmds.upload()
 
-        street_waypoints(self):
-            # a function for utilizing google maps queries to facilitate drone
-            # navigation
+    def prepare_waypoint(self, lat=12, lon=12):
+        prepare the waypoint object for relaying to the drone
 
-    interface(self):
-        # here we can construct the graphic interface for the users
+    def send_waypoint(self):
+        send the waypoint object to the drone
 
-    mainloop(self):
-        # this loop will help track heartbeat messages and such
+    def street_waypoints(self):
+        a function for utilizing google maps queries to facilitate drone
+        navigation
+        currently contains nothing
 
-    output(self, message):
-        # this allows us to use a standard formatting for messages and
-        # implement logging as well
+    def arm_copter(self, check=False):
+        a function for safely arming the vehicle
 
-    cleanup(self):
-        # actions to take at the end of the program, cleanup if you will lol
+    def takeoff(self, target=20):
+        this function takes the vehicle off under guided mode for safe
+        "no wake" style navigation
+
+    def interface(self):
+        here we can construct the graphic interface for the users
+        currently contains nothing
+
+    def output(self, message):
+        this allows us to use a standard formatting for messages and
+        implement logging as well
+        will print to screen
+
+    def cleanup(self):
+        actions to take at the end of the program, cleanup if you will lol
+        will be assigned to atexit
+
+    def mainloop(self, lat=41.840157, lon=-87.624705):
+        the main sequence for loading, launching, handling, and ending missions
+
+
+class Phone_App():
+    this is a program for waiting for the phone to communicate before passing
+    the mission to the drone, this has not yet been developed but is currently
+    a skeleton
+    lat = latitude coords from user
+    lon = longitude coords from user
+
+    def __init__(self):
+
+    def wait_connection(self):
+        waits until the phone app has communicated with the system before
+        sending coordinates to the drone
+
+    def cleanup(self):
+        intended to be bound to atexit for last minute cleanup such as on error
 
 """
 
